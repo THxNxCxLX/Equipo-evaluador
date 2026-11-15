@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#080d18">
+  <title>Áreas de trabajo | Equipo</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --night: #080d18;
+      --panel: #101a2b;
+      --panel-light: #14233a;
+      --blue: #287cff;
+      --blue-light: #78b7ff;
+      --text: #f4f7fc;
+      --muted: #b6c4d8;
+      --line: rgb(120 183 255 / 20%);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      min-width: 320px;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      background:
+        radial-gradient(ellipse at 85% 12%, rgb(28 91 174 / 18%), transparent 32rem),
+        linear-gradient(135deg, #050812, var(--night) 55%, #0b1930);
+      color: var(--text);
+      font-family: "Segoe UI", Arial, sans-serif;
+      line-height: 1.6;
+    }
+
+    .site-header {
+      position: sticky;
+      z-index: 5;
+      top: 0;
+      border-bottom: 1px solid var(--line);
+      background: rgb(8 13 24 / 94%);
+      backdrop-filter: blur(16px);
+    }
+
+    .nav {
+      display: flex;
+      width: min(1440px, 100%);
+      min-height: 76px;
+      align-items: center;
+      gap: 1.5rem;
+      margin: 0 auto;
+      padding: .5rem 1.5rem 0;
+    }
+
+    .brand {
+      flex: 0 0 auto;
+      padding-bottom: .5rem;
+      color: var(--text);
+      font-size: .95rem;
+      font-weight: 750;
+      text-decoration: none;
+    }
+
+    .tabs {
+      display: flex;
+      min-width: 0;
+      align-self: stretch;
+      align-items: stretch;
+      gap: .3rem;
+      overflow-x: auto;
+      scrollbar-width: thin;
+    }
+
+    .tab {
+      flex: 0 0 auto;
+      padding: .65rem .8rem;
+      border: 0;
+      border-bottom: 3px solid transparent;
+      border-radius: .6rem .6rem 0 0;
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      font: inherit;
+      font-size: .83rem;
+      font-weight: 600;
+      transition: background .2s ease, color .2s ease;
+    }
+
+    .tab:hover,
+    .tab:focus-visible {
+      background: rgb(40 124 255 / 12%);
+      color: white;
+    }
+
+    .tab[aria-selected="true"] {
+      border-bottom-color: var(--blue-light);
+      background: rgb(40 124 255 / 10%);
+      color: white;
+    }
+
+    main {
+      width: min(1180px, calc(100% - 3rem));
+      min-height: calc(100vh - 150px);
+      margin: 0 auto;
+      padding: clamp(2rem, 6vw, 5rem) 0;
+    }
+
+    [role="tabpanel"][hidden] {
+      display: none;
+    }
+
+    .welcome {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(280px, .82fr);
+      align-items: center;
+      gap: clamp(2rem, 6vw, 5rem);
+    }
+
+    .eyebrow {
+      margin: 0 0 .75rem;
+      color: var(--blue-light);
+      font-size: .78rem;
+      font-weight: 750;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin-top: 0;
+    }
+
+    h1 {
+      margin-bottom: 1.15rem;
+      font-size: clamp(2.6rem, 6vw, 4.7rem);
+      letter-spacing: -.05em;
+      line-height: 1.04;
+    }
+
+    h1 span {
+      color: var(--blue-light);
+    }
+
+    .welcome-copy {
+      max-width: 620px;
+      color: #d3deec;
+      font-size: clamp(1.05rem, 2vw, 1.2rem);
+    }
+
+    .welcome-copy p {
+      margin-bottom: 1rem;
+    }
+
+    .team-photo {
+      display: block;
+      width: 100%;
+      height: auto;
+      object-fit: contain;
+      border: 0;
+      background: transparent;
+      filter: drop-shadow(0 12px 24px rgb(40 124 255 / 20%));
+    }
+
+    .area-panel {
+      display: grid;
+      max-width: 1080px;
+      grid-template-areas: "foto contenido";
+      grid-template-columns: minmax(240px, .75fr) minmax(0, 1.35fr);
+      align-items: center;
+      gap: clamp(1.5rem, 4vw, 3rem);
+      margin: 0 auto;
+      padding: clamp(1.75rem, 5vw, 3.5rem);
+      border: 1px solid var(--line);
+      border-radius: 1.5rem;
+      background: linear-gradient(145deg, rgb(20 35 58 / 95%), rgb(12 21 36 / 95%));
+      box-shadow: 0 24px 70px rgb(0 0 0 / 22%);
+    }
+
+    .area-content {
+      grid-area: contenido;
+      min-width: 0;
+    }
+
+    .person-photo {
+      display: grid;
+      grid-area: foto;
+      min-height: 340px;
+      place-items: center;
+      padding: 1.5rem;
+      border: 1px dashed rgb(120 183 255 / 55%);
+      border-radius: 1.25rem;
+      background:
+        linear-gradient(145deg, rgb(40 124 255 / 15%), transparent 65%),
+        var(--panel);
+      color: var(--muted);
+      text-align: center;
+    }
+
+    .person-photo svg {
+      width: 3rem;
+      height: 3rem;
+      margin-bottom: .8rem;
+      color: var(--blue-light);
+    }
+
+    .person-photo .responsible-photo {
+      display: block;
+      width: min(100%, 280px);
+      aspect-ratio: 7 / 8;
+      margin: 0 auto 1rem;
+      object-fit: cover;
+      object-position: center 35%;
+      border: 1px solid var(--line);
+      border-radius: .9rem;
+      box-shadow: 0 12px 30px rgb(0 0 0 / 28%);
+    }
+
+    .person-photo strong {
+      display: block;
+      margin-bottom: .35rem;
+      color: var(--text);
+      font-size: 1.05rem;
+    }
+
+    .person-photo p {
+      max-width: 28ch;
+      margin: 0;
+      font-size: .88rem;
+    }
+
+    .person-photo .person-name {
+      max-width: none;
+      margin-top: .9rem;
+      padding-top: .75rem;
+      border-top: 1px solid var(--line);
+      color: var(--blue-light);
+      font-size: 1rem;
+      font-weight: 700;
+    }
+
+    .area-panel h2 {
+      margin-bottom: .8rem;
+      color: var(--blue-light);
+      font-size: clamp(2rem, 5vw, 3.3rem);
+      letter-spacing: -.04em;
+      line-height: 1.12;
+    }
+
+    .area-intro {
+      max-width: 68ch;
+      margin-bottom: 2rem;
+      color: #d3deec;
+      font-size: 1.08rem;
+    }
+
+    .area-panel h3 {
+      margin-bottom: .8rem;
+      font-size: 1.1rem;
+    }
+
+    .profile-details {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: .8rem;
+    }
+
+    .profile-button {
+      min-height: 3.5rem;
+      padding: .9rem 1rem;
+      border: 1px solid var(--line);
+      border-radius: .85rem;
+      background: rgb(255 255 255 / 3%);
+      color: var(--blue-light);
+      cursor: pointer;
+      font: inherit;
+      font-weight: 700;
+      text-align: left;
+      transition: background .2s ease, border-color .2s ease;
+    }
+
+    .profile-button:hover,
+    .profile-button:focus-visible {
+      border-color: var(--blue-light);
+      background: rgb(40 124 255 / 12%);
+      color: white;
+    }
+
+    .profile-dialog {
+      width: min(560px, calc(100% - 2rem));
+      margin: auto;
+      padding: clamp(1.5rem, 5vw, 2.5rem);
+      border: 1px solid var(--line);
+      border-radius: 1.25rem;
+      background: var(--panel);
+      color: var(--text);
+      box-shadow: 0 24px 80px rgb(0 0 0 / 45%);
+    }
+
+    .profile-dialog::backdrop {
+      background: rgb(0 0 0 / 78%);
+      backdrop-filter: blur(5px);
+    }
+
+    .profile-dialog h2 {
+      margin: 0 2.5rem .75rem 0;
+      color: var(--blue-light);
+      font-size: clamp(1.5rem, 5vw, 2rem);
+      line-height: 1.2;
+    }
+
+    .profile-dialog-area {
+      margin-bottom: .35rem;
+    }
+
+    .profile-dialog-copy {
+      margin: 0;
+      color: #d3deec;
+    }
+
+    .profile-dialog-copy ul {
+      margin: 0;
+      padding-left: 1.4rem;
+    }
+
+    .profile-dialog-copy li {
+      margin: .55rem 0;
+      padding-left: .2rem;
+      line-height: 1.5;
+    }
+
+    .profile-dialog-copy li::marker {
+      color: var(--blue-light);
+    }
+
+    .profile-dialog-close {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      width: 2.5rem;
+      height: 2.5rem;
+      border: 1px solid var(--line);
+      border-radius: 50%;
+      background: transparent;
+      color: var(--text);
+      cursor: pointer;
+      font: inherit;
+      font-size: 1.3rem;
+    }
+
+    .profile-dialog-close:hover,
+    .profile-dialog-close:focus-visible {
+      background: rgb(40 124 255 / 18%);
+    }
+
+    footer {
+      padding: 1.25rem 1rem;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: .88rem;
+      text-align: center;
+    }
+
+    footer p {
+      margin: 0;
+    }
+
+    @media (max-width: 900px) {
+      .nav {
+        display: block;
+        padding: .75rem 1rem 0;
+      }
+
+      .brand {
+        display: inline-block;
+        padding-bottom: .25rem;
+      }
+
+      .tabs {
+        min-height: 54px;
+        margin: 0 -1rem;
+        padding: 0 1rem;
+      }
+
+      .tab {
+        padding-inline: .75rem;
+      }
+
+      .welcome {
+        grid-template-columns: 1fr;
+      }
+
+      .area-panel {
+        grid-template-areas:
+          "foto"
+          "contenido";
+        grid-template-columns: 1fr;
+      }
+
+      .person-photo {
+        min-height: 260px;
+      }
+    }
+
+    @media (max-width: 560px) {
+      main {
+        width: calc(100% - 2rem);
+        padding: 2rem 0;
+      }
+
+      .profile-details {
+        grid-template-columns: 1fr;
+      }
+
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      *,
+      *::before,
+      *::after {
+        transition-duration: .01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <nav class="nav" aria-label="Navegación principal">
+      <a class="brand" href="#inicio">🌐</a>
+      <div class="tabs" role="tablist" aria-label="Áreas de trabajo">
+        <button class="tab" id="tab-inicio" type="button" role="tab" aria-selected="true" aria-controls="panel-inicio" tabindex="0">Home principal</button>
+        <button class="tab" id="tab-coordinacion" type="button" role="tab" aria-selected="false" aria-controls="panel-coordinacion" tabindex="-1">Coordinación general</button>
+        <button class="tab" id="tab-genero" type="button" role="tab" aria-selected="false" aria-controls="panel-genero" tabindex="-1">Género y derechos</button>
+        <button class="tab" id="tab-seguridad" type="button" role="tab" aria-selected="false" aria-controls="panel-seguridad" tabindex="-1">Seguridad alimentaria y desarrollo rural</button>
+        <button class="tab" id="tab-datos" type="button" role="tab" aria-selected="false" aria-controls="panel-datos" tabindex="-1">Análisis de datos</button>
+        <button class="tab" id="tab-calidad" type="button" role="tab" aria-selected="false" aria-controls="panel-calidad" tabindex="-1">Sistematización y calidad</button>
+        <button class="tab" id="tab-clima" type="button" role="tab" aria-selected="false" aria-controls="panel-clima" tabindex="-1">Cambio climático y sostenibilidad</button>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="welcome" id="panel-inicio" role="tabpanel" aria-labelledby="tab-inicio" tabindex="0">
+      <div class="welcome-copy">
+        <p class="eyebrow">Bienvenidas y bienvenidos</p>
+        <h1>Perfil <span>del equipo</span></h1>
+        <p> El proceso de evaluación será desarrollado por un equipo multidisciplinario de especialistas con trayectoria en evaluación de programas y proyectos de cooperación al desarrollo, transversalización del enfoque de género, seguridad alimentaria y nutricional, desarrollo rural e investigación social. La articulación de capacidades técnicas complementarias permitirá garantizar un abordaje integral, participativo y metodológicamente sólido, orientado a la generación de hallazgos, conclusiones y recomendaciones sustentadas en evidencia verificable.</p>
+        <p>Cada integrante desempeñará funciones y responsabilidades definidas conforme a su experiencia profesional, contribuyendo de manera coordinada al logro de los objetivos evaluativos, la aplicación de los instrumentos metodológicos y la entrega oportuna de los productos requeridos.</p>
+      </div>
+      <img class="team-photo" src="foto-equipo.png" alt="Foto del equipo de trabajo">
+    </section>
+
+    <section class="area-panel" id="panel-coordinacion" role="tabpanel" aria-labelledby="tab-coordinacion" tabindex="0" hidden>
+      <div class="area-content">
+        <p class="eyebrow">Área 02</p>
+        <h2>Coordinación general</h2>
+        <p class="area-intro">Lidera la planificación integral de la consultoría, coordina al equipo multidisciplinario y asegura la adecuada articulación entre los actores involucrados, incluyendo instituciones ejecutoras, beneficiarios y entidades financiadoras.</p>
+        <h3>Perfil profesional</h3>
+        <div class="profile-details">
+          <button class="profile-button" type="button" data-profile-field="formacion">Formación académica</button>
+          <button class="profile-button" type="button" data-profile-field="diplomados">Diplomados y certificaciones</button>
+          <button class="profile-button" type="button" data-profile-field="experiencia">Experiencia profesional</button>
+          <button class="profile-button" type="button" data-profile-field="responsabilidades">Responsabilidades</button>
+        </div>
+      </div>
+      <div class="person-photo" role="group" aria-label="Foto y nombre de la persona encargada de Coordinación general">
+        <div>
+          <img class="responsible-photo" src="Meybi.jpeg" alt="Foto de la coordinadora general">
+          <p class="person-name">Dra. Meybi Guadalupe Umaña Martínez</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="area-panel" id="panel-genero" role="tabpanel" aria-labelledby="tab-genero" tabindex="0" hidden>
+      <div class="area-content">
+        <p class="eyebrow">Área 03</p>
+        <h2>Género y derechos</h2>
+        <p class="area-intro">Su labor busca identificar los cambios generados por la intervención en la vida de mujeres, hombres, jóvenes y grupos vulnerables, evaluando su contribución al empoderamiento, la igualdad de oportunidades y la reducción de brechas sociales.</p>
+        <h3>Perfil profesional</h3>
+        <div class="profile-details">
+          <button class="profile-button" type="button" data-profile-field="formacion">Formación académica</button>
+          <button class="profile-button" type="button" data-profile-field="diplomados">Diplomados y certificaciones</button>
+          <button class="profile-button" type="button" data-profile-field="experiencia">Experiencia profesional</button>
+          <button class="profile-button" type="button" data-profile-field="responsabilidades">Responsabilidades</button>
+        </div>
+      </div>
+      <div class="person-photo" role="group" aria-label="Foto y nombre de la persona encargada de Género y derechos">
+        <div>
+          <img class="responsible-photo" src="foto-genero.jpeg" alt="Foto de Mtra. Alisson Nicole López González">
+          <p class="person-name">Mtra. Alisson Nicole López González</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="area-panel" id="panel-seguridad" role="tabpanel" aria-labelledby="tab-seguridad" tabindex="0" hidden>
+      <div class="area-content">
+        <p class="eyebrow">Área 04</p>
+        <h2>Seguridad alimentaria y desarrollo rural</h2>
+        <p class="area-intro">Su trabajo se enfoca en determinar la efectividad, sostenibilidad e impacto de las acciones impulsadas por el proyecto para mejorar las condiciones de vida de las familias beneficiarias.</p>
+        <h3>Perfil profesional</h3>
+        <div class="profile-details">
+          <button class="profile-button" type="button" data-profile-field="formacion">Formación académica</button>
+          <button class="profile-button" type="button" data-profile-field="diplomados">Diplomados y certificaciones</button>
+          <button class="profile-button" type="button" data-profile-field="experiencia">Experiencia profesional</button>
+          <button class="profile-button" type="button" data-profile-field="responsabilidades">Responsabilidades</button>
+        </div>
+      </div>
+      <div class="person-photo" role="group" aria-label="Foto y nombre de la persona encargada de Seguridad alimentaria y desarrollo rural">
+        <div>
+          <img class="responsible-photo" src="foto-seguridad.jpeg" alt="Foto de Ing. Jessica Marielos Alvarado Rico">
+          <p class="person-name">Ing. Jessica Marielos Alvarado Rico</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="area-panel" id="panel-datos" role="tabpanel" aria-labelledby="tab-datos" tabindex="0" hidden>
+      <div class="area-content">
+        <p class="eyebrow">Área 05</p>
+        <h2>Análisis de datos</h2>
+        <p class="area-intro">Diseña la metodología de investigación, define la muestra, valida instrumentos y procesa información cuantitativa y cualitativa para generar evidencia confiable, con rigor científico y validez estadística.</p>
+        <h3>Perfil profesional</h3>
+        <div class="profile-details">
+          <button class="profile-button" type="button" data-profile-field="formacion">Formación académica</button>
+          <button class="profile-button" type="button" data-profile-field="diplomados">Diplomados y certificaciones</button>
+          <button class="profile-button" type="button" data-profile-field="experiencia">Experiencia profesional</button>
+          <button class="profile-button" type="button" data-profile-field="responsabilidades">Responsabilidades</button>
+        </div>
+      </div>
+      <div class="person-photo" role="group" aria-label="Foto y nombre de la persona encargada de Análisis de datos">
+        <div>
+          <img class="responsible-photo" src="foto-datos.jpeg" alt="Foto de Mtro. Everth Josué Orellana Urquilla">
+          <p class="person-name">Mtro. Everth Josué Orellana Urquilla</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="area-panel" id="panel-calidad" role="tabpanel" aria-labelledby="tab-calidad" tabindex="0" hidden>
+      <div class="area-content">
+        <p class="eyebrow">Área 06</p>
+        <h2>Sistematización y calidad</h2>
+        <p class="area-intro">Transforma los resultados técnicos en conocimiento útil para la toma de decisiones institucionales y la difusión de experiencias exitosas entre los actores involucrados.</p>
+        <h3>Perfil profesional</h3>
+        <div class="profile-details">
+          <button class="profile-button" type="button" data-profile-field="formacion">Formación académica</button>
+          <button class="profile-button" type="button" data-profile-field="diplomados">Diplomados y certificaciones</button>
+          <button class="profile-button" type="button" data-profile-field="experiencia">Experiencia profesional</button>
+          <button class="profile-button" type="button" data-profile-field="responsabilidades">Responsabilidades</button>
+        </div>
+      </div>
+      <div class="person-photo" role="group" aria-label="Foto y nombre de la persona encargada de Sistematización y calidad">
+        <div>
+          <img class="responsible-photo" src="foto-calidad.jpeg" alt="Foto de Lic. Sayra Guadalupe Hernández Pineda">
+          <p class="person-name">Lic. Sayra Guadalupe Hernández Pineda</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="area-panel" id="panel-clima" role="tabpanel" aria-labelledby="tab-clima" tabindex="0" hidden>
+      <div class="area-content">
+        <p class="eyebrow">Área 07</p>
+        <h2>Cambio climático y sostenibilidad</h2>
+        <p class="area-intro">Evalúa la sostenibilidad ambiental de la intervención y su contribución a la resiliencia comunitaria ante el cambio climático, con énfasis en prácticas sostenibles, recursos naturales y adaptación climática.</p>
+        <h3>Perfil profesional</h3>
+        <div class="profile-details">
+          <button class="profile-button" type="button" data-profile-field="formacion">Formación académica</button>
+          <button class="profile-button" type="button" data-profile-field="diplomados">Diplomados y certificaciones</button>
+          <button class="profile-button" type="button" data-profile-field="experiencia">Experiencia profesional</button>
+          <button class="profile-button" type="button" data-profile-field="responsabilidades">Responsabilidades</button>
+        </div>
+      </div>
+      <div class="person-photo" role="group" aria-label="Foto y nombre de la persona encargada de Cambio climático y sostenibilidad">
+        <div>
+          <img class="responsible-photo" src="foto-clima.jpeg" alt="Foto de Mtra. Cecilia Elizabeth Hernández Cortés">
+          <p class="person-name">Mtra. Cecilia Elizabeth Hernández Cortés</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <dialog class="profile-dialog" id="profile-dialog" aria-labelledby="profile-dialog-title">
+    <button class="profile-dialog-close" id="profile-dialog-close" type="button" aria-label="Cerrar ventana">×</button>
+    <p class="eyebrow profile-dialog-area" id="profile-dialog-area"></p>
+    <h2 id="profile-dialog-title"></h2>
+    <div class="profile-dialog-copy" id="profile-dialog-copy"></div>
+  </dialog>
+
+  <footer>
+    <p>Áreas de trabajo · Un propósito compartido</p>
+  </footer>
+
+  <script>
+    const tabs = Array.from(document.querySelectorAll('[role="tab"]'));
+    const panels = Array.from(document.querySelectorAll('[role="tabpanel"]'));
+    const profileDialog = document.getElementById("profile-dialog");
+    const profileFields = {
+      "panel-coordinacion": {
+        formacion: [
+          "Doctorado en Cooperación Internacional, Desarrollo Sostenible y Políticas Públicas.",
+          "Maestría en Gestión, Monitoreo y Evaluación de Proyectos de Desarrollo.",
+          "Maestría en Planificación Estratégica para el Desarrollo Territorial.",
+          "Licenciatura en Relaciones Internacionales.",
+          "Especialización en Diseño y Evaluación de Programas financiados por Cooperación Internacional."
+        ],
+        diplomados: [
+          "Diplomado en Evaluación de Proyectos y Programas de Cooperación Internacional.",
+          "Diplomado en Gestión Basada en Resultados (GbR).",
+          "Certificación en Teoría del Cambio y Gestión Adaptativa.",
+          "Diplomado en Enfoque Basado en Derechos Humanos.",
+          "Diplomado en Igualdad de Género y Desarrollo.",
+          "Certificación en Monitoreo, Evaluación, Rendición de Cuentas y Aprendizaje (MEAL).",
+          "Curso especializado en Evaluación según criterios OCDE-CAD."
+        ],
+        experiencia: "Cuenta con más de quince años de experiencia en la dirección y evaluación de proyectos de desarrollo financiados por organismos internacionales, agencias de cooperación bilateral y organizaciones no gubernamentales. Ha coordinado evaluaciones intermedias, finales y de impacto en seguridad alimentaria, desarrollo rural, cambio climático, educación, gobernanza local y fortalecimiento institucional. Posee amplia experiencia en la gestión de equipos multidisciplinarios y en la elaboración de recomendaciones para mejorar políticas públicas y programas de desarrollo en Centroamérica.",
+        responsabilidades: [
+          "Dirigir técnica y estratégicamente la evaluación.",
+          "Aprobar la metodología, herramientas e instrumentos de investigación.",
+          "Supervisar la calidad técnica de todos los productos.",
+          "Coordinar la comunicación con EDUCO, Fundación Campo y AACID.",
+          "Validar hallazgos, conclusiones y recomendaciones.",
+          "Presentar los resultados ante los actores clave.",
+          "Garantizar el cumplimiento de los estándares de evaluación y de los plazos establecidos."
+        ]
+      },
+      "panel-genero": {
+        formacion: [
+          "Maestría en Estudios de Género y Desarrollo.",
+          "Licenciatura en Sociología.",
+          "Especialización en Derechos Humanos y Desarrollo Social.",
+          "Formación complementaria en participación ciudadana y políticas de igualdad."
+        ],
+        diplomados: [
+          "Diplomado en Género y Desarrollo.",
+          "Diplomado en Violencia Basada en Género.",
+          "Diplomado en Empoderamiento Económico de Mujeres.",
+          "Certificación en Derechos Humanos y Desarrollo Inclusivo.",
+          "Diplomado en Metodologías Participativas para la Inclusión Social.",
+          "Certificación en Evaluaciones Sensibles al Género."
+        ],
+        experiencia: "Posee más de diez años de experiencia en programas orientados al fortalecimiento de los derechos de las mujeres, la igualdad de género y el desarrollo comunitario. Ha participado en la formulación, seguimiento y evaluación de proyectos de ONG nacionales e internacionales, particularmente en zonas rurales. También ha brindado asistencia técnica para incorporar el enfoque de género en iniciativas productivas, educativas y de seguridad alimentaria.",
+        responsabilidades: [
+          "Evaluar la integración del enfoque de género en el proyecto.",
+          "Analizar los cambios diferenciados entre mujeres y hombres.",
+          "Diseñar instrumentos de recolección de información inclusivos.",
+          "Facilitar entrevistas y grupos focales con enfoque participativo.",
+          "Identificar brechas de acceso, participación y beneficios.",
+          "Elaborar recomendaciones orientadas a la igualdad de género.",
+          "Incorporar el enfoque de derechos humanos en el análisis de resultados."
+        ]
+      },
+      "panel-seguridad": {
+        formacion: [
+          "Maestría en Desarrollo Rural Sostenible.",
+          "Ingeniería Agronómica.",
+          "Especialización en Sistemas Productivos Sostenibles.",
+          "Formación en Gestión de Riesgos Climáticos para la Agricultura."
+        ],
+        diplomados: [
+          "Diplomado en Agricultura Resiliente al Cambio Climático.",
+          "Diplomado en Seguridad Alimentaria y Nutricional.",
+          "Certificación en Sistemas Agroecológicos.",
+          "Diplomado en Gestión Ambiental Comunitaria.",
+          "Certificación en Desarrollo de Cadenas de Valor Agropecuarias.",
+          "Curso especializado en Gestión Integrada de Recursos Naturales."
+        ],
+        experiencia: "Acumula más de doce años de experiencia en proyectos agrícolas, desarrollo rural y fortalecimiento de capacidades productivas. Ha trabajado con comunidades rurales y familias productoras del Corredor Seco Centroamericano en iniciativas de seguridad alimentaria, adaptación climática y generación de ingresos. También ha participado en evaluaciones de proyectos de cooperación internacional enfocados en agricultura sostenible y desarrollo económico local.",
+        responsabilidades: [
+          "Analizar los resultados productivos obtenidos por las familias participantes.",
+          "Evaluar la efectividad de las prácticas agroecológicas promovidas.",
+          "Revisar la sostenibilidad de las intervenciones agrícolas.",
+          "Analizar los efectos sobre la disponibilidad y el acceso a alimentos.",
+          "Valorar el desempeño de los planes de negocio apoyados por el proyecto.",
+          "Identificar factores de éxito y limitaciones de las estrategias implementadas.",
+          "Formular recomendaciones para fortalecer los medios de vida rurales."
+        ]
+      },
+      "panel-datos": {
+        formacion: [
+          "Maestría en Estadística Aplicada.",
+          "Licenciatura en Economía.",
+          "Especialización en Investigación Social.",
+          "Formación avanzada en metodologías cuantitativas y cualitativas."
+        ],
+        diplomados: [
+          "Diplomado en Investigación Social Aplicada.",
+          "Certificación en Análisis Estadístico con SPSS.",
+          "Certificación en Power BI para el análisis de proyectos.",
+          "Diplomado en Métodos Mixtos de Investigación.",
+          "Certificación en Gestión de Bases de Datos.",
+          "Formación especializada en monitoreo y evaluación de programas sociales."
+        ],
+        experiencia: "Cuenta con más de nueve años de experiencia en monitoreo, evaluación, investigación social aplicada y análisis estadístico. Ha diseñado estudios de línea base y evaluaciones intermedias y finales para proyectos financiados por organismos de cooperación internacional. Posee experiencia en el manejo de grandes volúmenes de datos, análisis multivariable y construcción de indicadores para medir resultados e impactos.",
+        responsabilidades: [
+          "Diseñar el plan metodológico de investigación.",
+          "Determinar el tamaño y la selección de la muestra.",
+          "Elaborar cuestionarios y herramientas de recopilación de datos.",
+          "Procesar y depurar información estadística.",
+          "Realizar análisis cuantitativos y cualitativos.",
+          "Elaborar tablas, gráficos e indicadores.",
+          "Apoyar la formulación de conclusiones basadas en evidencia."
+        ]
+      },
+      "panel-calidad": {
+        formacion: [
+          "Maestría en Comunicación para el Desarrollo.",
+          "Licenciatura en Ciencias de la Comunicación.",
+          "Especialización en Gestión del Conocimiento.",
+          "Formación en comunicación estratégica para organizaciones de desarrollo."
+        ],
+        diplomados: [
+          "Diplomado en Redacción de Informes Técnicos.",
+          "Diplomado en Comunicación para el Cambio Social.",
+          "Certificación en Sistematización de Experiencias de Desarrollo.",
+          "Diplomado en Gestión del Conocimiento.",
+          "Certificación en Comunicación Institucional.",
+          "Formación especializada en divulgación de resultados de evaluación."
+        ],
+        experiencia: "Posee más de ocho años de experiencia en documentación de proyectos sociales, gestión del conocimiento institucional y elaboración de informes para organismos nacionales e internacionales. Ha desarrollado productos de comunicación para actores técnicos y comunidades beneficiarias, facilitando la apropiación de resultados y lecciones aprendidas.",
+        responsabilidades: [
+          "Redactar informes técnicos y versiones ejecutivas.",
+          "Sistematizar lecciones aprendidas y buenas prácticas.",
+          "Documentar historias de vida y casos representativos.",
+          "Apoyar la edición y presentación de productos finales.",
+          "Diseñar materiales de difusión de resultados.",
+          "Fortalecer los mecanismos de gestión del conocimiento.",
+          "Garantizar la calidad narrativa y técnica de los informes."
+        ]
+      },
+      "panel-clima": {
+        formacion: [
+          "Maestría en Gestión Ambiental y Cambio Climático.",
+          "Licenciatura en Ciencias Ambientales.",
+          "Especialización en Desarrollo Territorial Sostenible.",
+          "Formación avanzada en adaptación y mitigación climática."
+        ],
+        diplomados: [
+          "Diplomado en Adaptación y Mitigación al Cambio Climático.",
+          "Diplomado en Gestión Integral de Recursos Naturales.",
+          "Certificación en Desarrollo Territorial Sostenible.",
+          "Diplomado en Evaluación Ambiental de Proyectos.",
+          "Certificación en Gestión del Riesgo de Desastres.",
+          "Curso especializado en Resiliencia Climática Comunitaria."
+        ],
+        experiencia: "Cuenta con más de diez años de experiencia en programas de sostenibilidad ambiental, resiliencia climática y gestión de riesgos. Ha participado en el diseño, implementación y evaluación de iniciativas de adaptación al cambio climático, recuperación de ecosistemas y fortalecimiento de capacidades comunitarias. Además, ha brindado asistencia técnica a proyectos de cooperación internacional enfocados en sostenibilidad y desarrollo rural.",
+        responsabilidades: [
+          "Evaluar los impactos ambientales derivados de la intervención.",
+          "Analizar la sostenibilidad de los resultados alcanzados.",
+          "Examinar los procesos de adaptación climática impulsados por el proyecto.",
+          "Identificar buenas prácticas ambientales replicables.",
+          "Valorar el fortalecimiento de capacidades comunitarias.",
+          "Elaborar recomendaciones orientadas a la resiliencia y sostenibilidad.",
+          "Contribuir al análisis integral de los efectos del proyecto sobre el territorio y los recursos naturales."
+        ]
+      }
+    };
+
+    document.querySelectorAll("[data-profile-field]").forEach((boton) => {
+      boton.addEventListener("click", () => {
+        const area = boton.closest(".area-panel");
+        const campo = boton.dataset.profileField;
+
+        document.getElementById("profile-dialog-area").textContent =
+          area.querySelector("h2").textContent;
+        document.getElementById("profile-dialog-title").textContent =
+          boton.textContent.trim();
+        const contenido = profileFields[area.id][campo];
+        const texto = document.getElementById("profile-dialog-copy");
+        texto.replaceChildren();
+
+        if (Array.isArray(contenido)) {
+          const lista = document.createElement("ul");
+          contenido.forEach((elemento) => {
+            const item = document.createElement("li");
+            item.textContent = elemento;
+            lista.append(item);
+          });
+          texto.append(lista);
+        } else {
+          texto.textContent = contenido;
+        }
+
+        profileDialog.showModal();
+      });
+    });
+
+    document.getElementById("profile-dialog-close").addEventListener("click", () => {
+      profileDialog.close();
+    });
+
+    profileDialog.addEventListener("click", (evento) => {
+      if (evento.target === profileDialog) {
+        profileDialog.close();
+      }
+    });
+
+    function seleccionarPestana(tab, moverFoco) {
+      tabs.forEach((elemento, indice) => {
+        const activa = elemento === tab;
+        elemento.setAttribute("aria-selected", String(activa));
+        elemento.tabIndex = activa ? 0 : -1;
+        panels[indice].hidden = !activa;
+      });
+
+      if (moverFoco) {
+        tab.focus();
+      }
+    }
+
+    tabs.forEach((tab, indice) => {
+      tab.addEventListener("click", () => seleccionarPestana(tab, false));
+      tab.addEventListener("keydown", (evento) => {
+        let siguiente = indice;
+
+        if (evento.key === "ArrowRight") {
+          siguiente = (indice + 1) % tabs.length;
+        } else if (evento.key === "ArrowLeft") {
+          siguiente = (indice - 1 + tabs.length) % tabs.length;
+        } else if (evento.key === "Home") {
+          siguiente = 0;
+        } else if (evento.key === "End") {
+          siguiente = tabs.length - 1;
+        } else {
+          return;
+        }
+
+        evento.preventDefault();
+        seleccionarPestana(tabs[siguiente], true);
+      });
+    });
+  </script>
+</body>
+</html>
